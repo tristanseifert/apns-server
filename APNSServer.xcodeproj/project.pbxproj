@@ -1,0 +1,233 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		DE9AD7141751B654005F8C8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = DE9AD7131751B654005F8C8D /* main.c */; };
+		DE9AD7161751B654005F8C8D /* APNSServer.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DE9AD7151751B654005F8C8D /* APNSServer.1 */; };
+		DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AD71C1751B680005F8C8D /* libssl.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		DE9AD70E1751B654005F8C8D /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				DE9AD7161751B654005F8C8D /* APNSServer.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		DE9AD7101751B654005F8C8D /* APNSServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APNSServer; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE9AD7131751B654005F8C8D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		DE9AD7151751B654005F8C8D /* APNSServer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = APNSServer.1; sourceTree = "<group>"; };
+		DE9AD71C1751B680005F8C8D /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
+		DE9AD71E1751B72A005F8C8D /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		DE9AD71F1751B7DD005F8C8D /* apns_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = apns_config.h; sourceTree = "<group>"; };
+		DE9AD7201751C351005F8C8D /* ansi_terminal_defs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ansi_terminal_defs.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		DE9AD70D1751B654005F8C8D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		DE9AD7071751B654005F8C8D = {
+			isa = PBXGroup;
+			children = (
+				DE9AD71C1751B680005F8C8D /* libssl.dylib */,
+				DE9AD7121751B654005F8C8D /* APNSServer */,
+				DE9AD7111751B654005F8C8D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		DE9AD7111751B654005F8C8D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DE9AD7101751B654005F8C8D /* APNSServer */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DE9AD7121751B654005F8C8D /* APNSServer */ = {
+			isa = PBXGroup;
+			children = (
+				DE9AD7131751B654005F8C8D /* main.c */,
+				DE9AD71E1751B72A005F8C8D /* main.h */,
+				DE9AD7151751B654005F8C8D /* APNSServer.1 */,
+				DE9AD71F1751B7DD005F8C8D /* apns_config.h */,
+				DE9AD7201751C351005F8C8D /* ansi_terminal_defs.h */,
+			);
+			path = APNSServer;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DE9AD70F1751B654005F8C8D /* APNSServer */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DE9AD7191751B654005F8C8D /* Build configuration list for PBXNativeTarget "APNSServer" */;
+			buildPhases = (
+				DE9AD70C1751B654005F8C8D /* Sources */,
+				DE9AD70D1751B654005F8C8D /* Frameworks */,
+				DE9AD70E1751B654005F8C8D /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = APNSServer;
+			productName = APNSServer;
+			productReference = DE9AD7101751B654005F8C8D /* APNSServer */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		DE9AD7081751B654005F8C8D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "Squee! Apps";
+			};
+			buildConfigurationList = DE9AD70B1751B654005F8C8D /* Build configuration list for PBXProject "APNSServer" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = DE9AD7071751B654005F8C8D;
+			productRefGroup = DE9AD7111751B654005F8C8D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DE9AD70F1751B654005F8C8D /* APNSServer */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		DE9AD70C1751B654005F8C8D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DE9AD7141751B654005F8C8D /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		DE9AD7171751B654005F8C8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		DE9AD7181751B654005F8C8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		DE9AD71A1751B654005F8C8D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		DE9AD71B1751B654005F8C8D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		DE9AD70B1751B654005F8C8D /* Build configuration list for PBXProject "APNSServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE9AD7171751B654005F8C8D /* Debug */,
+				DE9AD7181751B654005F8C8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DE9AD7191751B654005F8C8D /* Build configuration list for PBXNativeTarget "APNSServer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DE9AD71A1751B654005F8C8D /* Debug */,
+				DE9AD71B1751B654005F8C8D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = DE9AD7081751B654005F8C8D /* Project object */;
+}
