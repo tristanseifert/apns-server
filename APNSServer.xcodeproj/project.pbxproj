@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE121B921790B48F001517C3 /* ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B911790B48F001517C3 /* ssl.c */; };
 		DE9AD7141751B654005F8C8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = DE9AD7131751B654005F8C8D /* main.c */; };
 		DE9AD7161751B654005F8C8D /* APNSServer.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DE9AD7151751B654005F8C8D /* APNSServer.1 */; };
 		DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AD71C1751B680005F8C8D /* libssl.dylib */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DE121B911790B48F001517C3 /* ssl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ssl.c; sourceTree = "<group>"; };
+		DE121B931790B49E001517C3 /* ssl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ssl.h; sourceTree = "<group>"; };
 		DE9AD7101751B654005F8C8D /* APNSServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APNSServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9AD7131751B654005F8C8D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		DE9AD7151751B654005F8C8D /* APNSServer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = APNSServer.1; sourceTree = "<group>"; };
@@ -47,6 +50,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DE121B941790B4A3001517C3 /* SSL Handling */ = {
+			isa = PBXGroup;
+			children = (
+				DE121B911790B48F001517C3 /* ssl.c */,
+				DE121B931790B49E001517C3 /* ssl.h */,
+			);
+			name = "SSL Handling";
+			sourceTree = "<group>";
+		};
 		DE9AD7071751B654005F8C8D = {
 			isa = PBXGroup;
 			children = (
@@ -72,6 +84,7 @@
 				DE9AD7151751B654005F8C8D /* APNSServer.1 */,
 				DE9AD71F1751B7DD005F8C8D /* apns_config.h */,
 				DE9AD7201751C351005F8C8D /* ansi_terminal_defs.h */,
+				DE121B941790B4A3001517C3 /* SSL Handling */,
 			);
 			path = APNSServer;
 			sourceTree = "<group>";
@@ -128,6 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DE9AD7141751B654005F8C8D /* main.c in Sources */,
+				DE121B921790B48F001517C3 /* ssl.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -226,6 +240,7 @@
 				DE9AD71B1751B654005F8C8D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

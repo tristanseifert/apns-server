@@ -20,61 +20,16 @@
 
 #include <openssl/ssl.h>
 
-int main(int argc, const char * argv[]) {
-    /* printf("Initialising OpenSSL... ");
-    initSSLLib();
-    printf("Done.\n\n"); */
-    
-    // Try and resolve the APNS server    
-    struct addrinfo *addrInfo;
-    
-    printf(ANSI_BOLD "Resolving APNS server address (%s)...\n" ANSI_RESET, APNS_HOST);
+static SSLConn *shared_SSL_connection;
 
-    // Try and resolve the APNS hostname
-    if(getaddrinfo(APNS_HOST, NULL, NULL, &addrInfo) != 0) {
-        perror("Can't resolve APNS host");
-        return -1;
-    }
+int main(int argc, const char * argv[]) {
+    printf(ANSI_BOLD "Establishing SSL connection to Apple servers...\n" ANSI_RESET);
     
-    // Copy IP from returned server address
-    struct sockaddr_in socketAddress;
-    socketAddress.sin_addr = ((struct sockaddr_in *) addrInfo->ai_addr)->sin_addr;
-    
-    // Further set up sockaddr_in struct
-    socketAddress.sin_port = htons(APNS_PORT); // Use specified port
-    socketAddress.sin_family = AF_INET; // Use IPv4
-    
-    printf(ANSI_COLOR_GREEN "Resolved APNS host to %s" ANSI_RESET, inet_ntoa(socketAddress.sin_addr));
-    
-    
-    // Set up the socket
-    printf(ANSI_BOLD "\n\nCreating socket...\n" ANSI_RESET);
-    int APNSSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    
-    if(APNSSocket == -1) {
-        perror("Can't create socket");
-        return -1;
-    }
-    
-    printf(ANSI_BOLD ANSI_COLOR_GREEN "Socket created.\n" ANSI_RESET);
-    
-    printf(ANSI_BOLD "Connecting socket to server...\n" ANSI_RESET);
-    
-    // Try and connect to the server
-    int connectErr;
-    if ((connectErr = connect(APNSSocket, (const struct sockaddr*) &socketAddress, sizeof(socketAddress)))) {
-        printf("connect() error %i\n", connectErr);
-        perror("Can't connect socket");
-        return -1;
-    }
+    shared_SSL_connection = SSL_Connect(APNS_HOST, APNS_PORT, RSA_CLIENT_CERT, RSA_CLIENT_KEY, CA_CERT_PATH);
     
     printf(ANSI_BOLD ANSI_COLOR_GREEN "\nSocket connected!\n\n" ANSI_RESET);
-    
-    // If we get here without a problem, we (should) have a functional socket.
+ to donigans ver
+    // If we get here without a problem, we have a functional socket.
 }
 
-void initSSLLib() {
-    SSL_load_error_strings();                /* readable error messages */
-    SSL_library_init();                      /* initialize library */
-}
 

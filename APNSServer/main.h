@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Squee! Apps. All rights reserved.
 //
 
+#include "ssl.h"
+
 #ifndef APNSServer_main_h
 #define APNSServer_main_h
-
-void initSSLLib();
 
 #endif
