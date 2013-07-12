@@ -9,6 +9,7 @@
 #include "ssl.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <openssl/err.h>
 
 /*
