@@ -33,7 +33,7 @@ typedef struct {
     int sock;
 } SSLConn;
 
-static SSLConn *shared_SSL_connection = NULL;
+volatile static SSLConn *shared_SSL_connection = NULL;
 
 SSLConn *SSL_Connect(const char *host, int port, const char *certfile, const char *keyfile, const char* capath);
 void SSL_Disconnect(SSLConn *sslcon);

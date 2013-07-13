@@ -15,6 +15,9 @@
 #ifndef APNSServer_apns_config_h
 #define APNSServer_apns_config_h
 
+// Set to one to enable all debug logging
+#define APNS_DEBUG 1
+
 // Set the host and port to connect to
 #define APNS_HOST "gateway.sandbox.push.apple.com"
 #define APNS_PORT 2195
@@ -39,6 +42,9 @@
 #define MAX_CLIENT_MSG_SIZE 1024*4
 
 // Various debugging defines (should be commented out when compiled for prod)
+#if APNS_DEBUG == 1
 #define LINKED_LIST_DEBUG 1
+#define MSG_PROCESSING_DEBUG 1
+#endif
 
 #endif

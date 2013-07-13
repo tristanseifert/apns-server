@@ -179,14 +179,18 @@ inline void msg_queue_delete_entry(msg_queue_entry *entry) {
 void msg_queue_print_pretty_rep() {
     msg_queue_entry *entry = msg_queue;
     
-    if(msg_queue->content == NULL) {
+    if(msg_queue == NULL) {
         printf("No items in message queue.\n");
         return;
     }
     
     int i = 0;
     while(entry != NULL) {
-        printf("Item %.4i: 0x%0.8X, points to 0x%.8X, content at 0x%.8X\n", i, (int) entry, (int) entry->next_entry, (int)entry->content);
+        if(entry->content != NULL) {
+            printf("Item %.4i: 0x%0.8X, points to 0x%.8X, content at 0x%.8X @\n", i, (int) entry, (int) entry->next_entry, (int)entry->content);
+        } else {
+            printf("Item %.4i: 0x%0.8X, points to 0x%.8X, content at 0x%.8X *\n", i, (int) entry, (int) entry->next_entry, (int)entry->content);            
+        }
         
         i++;
         entry = (msg_queue_entry *) entry->next_entry;

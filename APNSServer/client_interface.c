@@ -219,6 +219,7 @@ void *client_interface_connection_handler(void *connection) {
     
     // allocate memory for the message
     push_msg *message = malloc(sizeof(push_msg));
+    memset(message, 0x00, sizeof(push_msg));
 
     if(message == NULL) {
         write(sock, "nomem", 5);
@@ -282,6 +283,7 @@ void *client_interface_connection_handler(void *connection) {
  */
 inline char* copy_json_info(json_value *value) {
     char *destBuff = malloc(value->u.string.length + 2); // alloc mem + 2
+    memset(destBuff, 0x00, sizeof(value->u.string.length + 2));
     strncpy(destBuff, value->u.string.ptr, value->u.string.length); // copy
     
     return destBuff; // return

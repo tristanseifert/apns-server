@@ -14,22 +14,8 @@
 		DE121BA41790F67F001517C3 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121BA21790F67F001517C3 /* json.c */; };
 		DE121BAB17910A06001517C3 /* client_interface.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121BAA17910A06001517C3 /* client_interface.c */; };
 		DE9AD7141751B654005F8C8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = DE9AD7131751B654005F8C8D /* main.c */; };
-		DE9AD7161751B654005F8C8D /* APNSServer.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DE9AD7151751B654005F8C8D /* APNSServer.1 */; };
 		DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AD71C1751B680005F8C8D /* libssl.dylib */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		DE9AD70E1751B654005F8C8D /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-				DE9AD7161751B654005F8C8D /* APNSServer.1 in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		DE121B911790B48F001517C3 /* ssl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ssl.c; sourceTree = "<group>"; };
@@ -47,7 +33,6 @@
 		DE121BAA17910A06001517C3 /* client_interface.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = client_interface.c; path = APNSServer/client_interface.c; sourceTree = "<group>"; };
 		DE9AD7101751B654005F8C8D /* APNSServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APNSServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9AD7131751B654005F8C8D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		DE9AD7151751B654005F8C8D /* APNSServer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = APNSServer.1; sourceTree = "<group>"; };
 		DE9AD71C1751B680005F8C8D /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
 		DE9AD71E1751B72A005F8C8D /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
 		DE9AD71F1751B7DD005F8C8D /* apns_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = apns_config.h; sourceTree = "<group>"; };
@@ -150,7 +135,6 @@
 				DE121B9E1790F0A1001517C3 /* Miscellaneous */,
 				DE9AD7131751B654005F8C8D /* main.c */,
 				DE9AD71E1751B72A005F8C8D /* main.h */,
-				DE9AD7151751B654005F8C8D /* APNSServer.1 */,
 				DE9AD71F1751B7DD005F8C8D /* apns_config.h */,
 				DE9AD7201751C351005F8C8D /* ansi_terminal_defs.h */,
 			);
@@ -166,7 +150,6 @@
 			buildPhases = (
 				DE9AD70C1751B654005F8C8D /* Sources */,
 				DE9AD70D1751B654005F8C8D /* Frameworks */,
-				DE9AD70E1751B654005F8C8D /* CopyFiles */,
 			);
 			buildRules = (
 			);

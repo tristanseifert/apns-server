@@ -7,11 +7,17 @@
 //
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
 
 #include "msg_handler.h"
 #include "msg_queue.h"
+#include "msg.h"
+
+#include "ssl.h"
+
+#include "apns_config.h"
 
 static int msg_handler_should_run = 0;
 static pthread_t msg_handler_pthread;
@@ -27,9 +33,42 @@ void *msg_handler_thread(void *param) {
         
         // check the message queue actually exists
         if(msg_queue_get_ptr() != NULL) {
+#ifdef MSG_PROCESSING_DEBUG
             msg_queue_print_pretty_rep();
+#endif
+            
+            int numNotifsProc = 0;
+            
+            msg_queue_entry *read_ptr = (msg_queue_entry *) msg_queue_get_ptr();
+            
+            // iterate through all the items in list
+            while(read_ptr != NULL) {
+                if(read_ptr->content != NULL) {
+                    numNotifsProc++;
+                    
+                    // get the notification
+                    push_msg *msg = read_ptr->content;
+                    
+#ifdef MSG_PROCESSING_DEBUG
+                    printf("Notification title \"%s\" sent to %s\n", msg->text, msg->deviceID);
+#endif
+                    
+                    // mark as empty
+                    free(read_ptr->content);
+                    read_ptr->content = NULL;
+                }
+                
+                // advance pointer
+                read_ptr =  (msg_queue_entry *) read_ptr->next_entry;
+            }
+            
+#ifdef MSG_PROCESSING_DEBUG
+            printf("Processed %i push notifications.\n", numNotifsProc);
+#endif
         } else {
+#ifdef MSG_PROCESSING_DEBUG
             printf("No messages to process.\n");
+#endif
         }
         
         fflush(stdout);
@@ -71,4 +110,16 @@ void msg_handler_end(int haveMercy) {
     if(!haveMercy) {
         pthread_cancel(msg_handler_pthread);
     }
+}
+
+/*
+ * Serialises a message, then transmits it to the APNS servers.
+ */
+void msg_handler_send_push(push_msg *message) {
+    // 		$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+    int requiredMsgBufSize = 4096;
+    char *messageBuffer = malloc(sizeof(char) * requiredMsgBufSize);
+    memset(messageBuffer, 0x00, sizeof(char) * requiredMsgBufSize);
+    
+    ssl_write_to_sock((SSLConn *) shared_SSL_connection, messageBuffer, requiredMsgBufSize);
 }
