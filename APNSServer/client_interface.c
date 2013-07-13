@@ -24,7 +24,7 @@
 
 static int client_socket = 0;
 static int client_should_run = 0;
-static pthread_t client_service_thread = NULL;
+static pthread_t client_service_thread;
 
 void *client_interface_listening_thread(void *param);
 void *client_interface_connection_handler(void *connection);
@@ -43,6 +43,7 @@ int client_interface_set_up() {
     
     hp = gethostbyname(ourname);
     if(hp == NULL) { // we apparently don't exist - what is this, the matrix?
+        perror("Finding hostname");
         return -1;
     }
     
@@ -51,12 +52,14 @@ int client_interface_set_up() {
     
     // create socket
     if((client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+        perror("Creating listening socket");
         return 255;
     }
     
     // bind socket
     if(bind(client_socket, (const struct sockaddr *) &sa, sizeof(struct sockaddr_in)) < 0) {
         close(client_socket);
+        perror("Binding listening socket");
         return 512;
     }
     
@@ -70,6 +73,9 @@ int client_interface_set_up() {
     if(error) {
         client_should_run = 0;
         close(client_socket);
+        
+        perror("Creating listening thread");
+        
         return error | 0x8000;
     }
     
@@ -106,7 +112,11 @@ void client_interface_stop(int mercy) {
  * This thread processes connections.
  */
 void *client_interface_listening_thread(void *param) {
-    volatile int t; // holds the connection we establish with clients
+    int t; // holds the connection we establish with clients
+    
+    printf("Client listening thread active. Listening for clients on port %i...\n"
+           , CLIENT_LISTEN_PORT);
+    fflush(stdout);
     
     while(client_should_run) {
         if((t = client_interface_get_connection()) < 0) {
@@ -117,8 +127,8 @@ void *client_interface_listening_thread(void *param) {
             perror("Accept client connection"); // die, we got an unknown error
         }
         
-        // char sock[4] = &t;
-        pthread_create(NULL, NULL, client_interface_connection_handler, (void *) &t);
+        pthread_t thread; // we don't really care about this thread later, it'll die eventually
+        pthread_create(&thread, NULL, client_interface_connection_handler, (void *) &t);
     }
     
     close(client_socket);
@@ -133,6 +143,8 @@ void *client_interface_listening_thread(void *param) {
  */
 void *client_interface_connection_handler(void *connection) {
     int sock = *((int *) connection);
+
+    printf("Client connected.\n");
     
     char *msg_buf = calloc(MAX_CLIENT_MSG_SIZE + 1, sizeof(char));
     char *msg_buf_write_ptr = msg_buf;
@@ -140,16 +152,36 @@ void *client_interface_connection_handler(void *connection) {
     long bytes_read_total = 0;
     long bytes_read = 0;
     
-    // Read while we've got bytes
-    while((bytes_read = read(sock, msg_buf_write_ptr, MAX_CLIENT_MSG_SIZE - bytes_read_total)) > 0) {
+    // Read one byte at a time
+    while((bytes_read = read(sock, msg_buf_write_ptr, 1)) > 0) {
         bytes_read_total += bytes_read;
+        
+        if(strcmp(msg_buf_write_ptr, "\n") == 0) {
+            printf("Received \\n.\n");
+            break;
+        }
+        
         msg_buf_write_ptr += bytes_read;
     }
     
+    printf("Read %li bytes from client.\n", bytes_read_total);
+    
     // try and parse JSON
-    char jsonErr;
+    char *jsonErr = calloc(512, sizeof(char));
     json_settings settings = { 0 };
-    json_value *parsed = json_parse_ex(&settings, msg_buf, MAX_CLIENT_MSG_SIZE, &jsonErr);
+    json_value *parsed = json_parse_ex(&settings, msg_buf, MAX_CLIENT_MSG_SIZE, jsonErr);
+    
+    if(!parsed) {
+        write(sock, "err", 3);
+        printf("Error parsing JSON: %s\n", jsonErr);
+    } else {
+        write(sock, "ok", 2);
+        printf("Parsed value at 0x%X\n\n", (int) parsed);
+    }
+    
+    fflush(stdout);
+    
+    close(sock);
     
     return NULL;
 }

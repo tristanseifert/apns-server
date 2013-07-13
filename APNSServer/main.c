@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <signal.h>
 #include <pthread.h>
 
@@ -33,14 +34,24 @@ int main(int argc, const char * argv[]) {
     signal(SIGINT, intHandler);
     
     // Start threads
-    msg_handler_begin();
+    int error = msg_handler_begin();
+    if(error) {
+        printf("Error starting message handler: %i", error);
+        return error;
+    }
     
     // Set up listening socket
-    client_interface_set_up();
+    error = client_interface_set_up();
+    if(error) {
+        printf("Error starting message handler: %i", error);
+        return error;
+    }
+    
+    printf("\nServer is ready. Waiting for connections.\n");
     
     // Go into an infinite loop here
     while(1) {
-        
+        sleep(5);
     }
 }
 
