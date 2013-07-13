@@ -19,6 +19,8 @@
 #include <pthread.h>
 
 #include "json.h"
+#include "msg.h"
+#include "msg_handler.h"
 
 #include "ansi_terminal_defs.h"
 #include "apns_config.h"
@@ -29,6 +31,7 @@ static pthread_t client_service_thread;
 
 void *client_interface_listening_thread(void *param);
 void *client_interface_connection_handler(void *connection);
+extern inline inline char* copy_json_info(json_value *value);
 
 /*
  * Sets up a socket on which we listen for clients. Also creates the listening
@@ -175,7 +178,7 @@ void *client_interface_connection_handler(void *connection) {
             write(sock, "overflow", 8);
             
             // Close socket
-            fflush(stdout);
+            free(msg_buf);
             close(sock);
             
             pthread_exit(NULL);
@@ -192,33 +195,88 @@ void *client_interface_connection_handler(void *connection) {
     if(!parsed) {
         write(sock, "err", 3);
         printf("Error parsing JSON: %s\n", jsonErr);
-    } else {        
+        
+        // free memory, close socket
+        free(jsonErr);
+        free(msg_buf);
+        close(sock);
+        
+        pthread_exit(NULL);
+    } else {
         if(parsed->type != json_object) {
             write(sock, "err_type", 8);
             printf("Expected json_object, got %i", parsed->type);
             
-            // Free memory
+            // free memory, close socket
             free(parsed);
             free(jsonErr);
-            
-            // Close socket
-            fflush(stdout);
+            free(msg_buf);
             close(sock);
             
             pthread_exit(NULL);
         }
     }
-    // If we get down here, we should have a properly parsed JSON object
+    
+    // allocate memory for the message
+    push_msg *message = malloc(sizeof(push_msg));
+
+    if(message == NULL) {
+        write(sock, "nomem", 5);
+        
+        printf("Could not allocate push_msg object!\n");
+        
+        // free memory, close socket
+        free(parsed);
+        free(jsonErr);
+        free(msg_buf);
+        close(sock);
+        
+        pthread_exit(NULL);        
+    }
+    
+    // loop through all the items in the objectoid
+    for (int i = 0; i < parsed->u.object.length; i++) {
+        char *name = parsed->u.object.values[i].name;
+        json_value *value = parsed->u.object.values[i].value;
+
+        // compare name against all keys
+        if(strcmp("text", name) == 0 && value->type == json_string) {
+            message->text = copy_json_info(value);
+        } else if(strcmp("sound", name) == 0 && value->type == json_string) {
+            message->sound = copy_json_info(value);
+        } else if(strcmp("badge", name) == 0 && value->type == json_integer) {
+            message->badgeNumber = (int) value->u.integer;
+        } else if(strcmp("custom", name) == 0 && value->type == json_string) {
+            message->custPayload = copy_json_info(value);
+        } else if(strcmp("key", name) == 0 && value->type == json_string) {
+            message->deviceID = copy_json_info(value);
+        } else {
+            printf("Encountered unexpected token: %s\n", name);
+        }
+    }
+    
     write(sock, "ok", 2);
     
-    // Free memory
+    // Free memory, close socket
     free(parsed);
     free(msg_buf);
     free(jsonErr);
-    
-    // Close socket
-    fflush(stdout);
     close(sock);
     
+    printf("Text: %s\nDevice: %s\n", message->text, message->deviceID);
+    
+    fflush(stdout);
+    
     return NULL;
+}
+
+/*
+ * This inline copies a string from the json_value struct to the destination
+ * string buffer, ensuring that memory is allocated.
+ */
+inline char* copy_json_info(json_value *value) {
+    char *destBuff = malloc(value->u.string.length + 2); // alloc mem + 2
+    strncpy(destBuff, value->u.string.ptr, value->u.string.length); // copy
+    
+    return destBuff; // return
 }
