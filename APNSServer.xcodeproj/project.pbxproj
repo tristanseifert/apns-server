@@ -10,6 +10,9 @@
 		DE121B921790B48F001517C3 /* ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B911790B48F001517C3 /* ssl.c */; };
 		DE121B971790C4F6001517C3 /* msg_queue.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B961790C4F6001517C3 /* msg_queue.c */; };
 		DE121B9D1790E546001517C3 /* msg_handler.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B9C1790E545001517C3 /* msg_handler.c */; };
+		DE121BA01790F0B2001517C3 /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B9F1790F0B2001517C3 /* util.c */; };
+		DE121BA41790F67F001517C3 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121BA21790F67F001517C3 /* json.c */; };
+		DE121BAB17910A06001517C3 /* client_interface.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121BAA17910A06001517C3 /* client_interface.c */; };
 		DE9AD7141751B654005F8C8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = DE9AD7131751B654005F8C8D /* main.c */; };
 		DE9AD7161751B654005F8C8D /* APNSServer.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DE9AD7151751B654005F8C8D /* APNSServer.1 */; };
 		DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AD71C1751B680005F8C8D /* libssl.dylib */; };
@@ -36,6 +39,12 @@
 		DE121B9A1790C626001517C3 /* msg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msg.h; sourceTree = "<group>"; };
 		DE121B9B1790E529001517C3 /* msg_handler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msg_handler.h; sourceTree = "<group>"; };
 		DE121B9C1790E545001517C3 /* msg_handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = msg_handler.c; sourceTree = "<group>"; };
+		DE121B9F1790F0B2001517C3 /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
+		DE121BA11790F0B8001517C3 /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
+		DE121BA21790F67F001517C3 /* json.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = json.c; path = "json-parser/json.c"; sourceTree = SOURCE_ROOT; };
+		DE121BA31790F67F001517C3 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json.h; path = "json-parser/json.h"; sourceTree = SOURCE_ROOT; };
+		DE121BA9179109D3001517C3 /* client_interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = client_interface.h; path = APNSServer/client_interface.h; sourceTree = "<group>"; };
+		DE121BAA17910A06001517C3 /* client_interface.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = client_interface.c; path = APNSServer/client_interface.c; sourceTree = "<group>"; };
 		DE9AD7101751B654005F8C8D /* APNSServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APNSServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9AD7131751B654005F8C8D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		DE9AD7151751B654005F8C8D /* APNSServer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = APNSServer.1; sourceTree = "<group>"; };
@@ -70,8 +79,8 @@
 			isa = PBXGroup;
 			children = (
 				DE121B9A1790C626001517C3 /* msg.h */,
-				DE121B9B1790E529001517C3 /* msg_handler.h */,
 				DE121B9C1790E545001517C3 /* msg_handler.c */,
+				DE121B9B1790E529001517C3 /* msg_handler.h */,
 			);
 			name = "Message Handling";
 			sourceTree = "<group>";
@@ -83,6 +92,35 @@
 				DE121B981790C4FF001517C3 /* msg_queue.h */,
 			);
 			name = "Message Queueing";
+			sourceTree = "<group>";
+		};
+		DE121B9E1790F0A1001517C3 /* Miscellaneous */ = {
+			isa = PBXGroup;
+			children = (
+				DE121BA51790F683001517C3 /* JSON */,
+				DE121B9F1790F0B2001517C3 /* util.c */,
+				DE121BA11790F0B8001517C3 /* util.h */,
+			);
+			name = Miscellaneous;
+			sourceTree = "<group>";
+		};
+		DE121BA51790F683001517C3 /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				DE121BA21790F67F001517C3 /* json.c */,
+				DE121BA31790F67F001517C3 /* json.h */,
+			);
+			name = JSON;
+			sourceTree = "<group>";
+		};
+		DE121BA617910939001517C3 /* Client Interfacing */ = {
+			isa = PBXGroup;
+			children = (
+				DE121BAA17910A06001517C3 /* client_interface.c */,
+				DE121BA9179109D3001517C3 /* client_interface.h */,
+			);
+			name = "Client Interfacing";
+			path = ..;
 			sourceTree = "<group>";
 		};
 		DE9AD7071751B654005F8C8D = {
@@ -107,12 +145,14 @@
 			children = (
 				DE121B991790C60C001517C3 /* Message Queueing */,
 				DE121B951790C4DC001517C3 /* Message Handling */,
+				DE121B941790B4A3001517C3 /* SSL Handling */,
+				DE121BA617910939001517C3 /* Client Interfacing */,
+				DE121B9E1790F0A1001517C3 /* Miscellaneous */,
 				DE9AD7131751B654005F8C8D /* main.c */,
 				DE9AD71E1751B72A005F8C8D /* main.h */,
 				DE9AD7151751B654005F8C8D /* APNSServer.1 */,
 				DE9AD71F1751B7DD005F8C8D /* apns_config.h */,
 				DE9AD7201751C351005F8C8D /* ansi_terminal_defs.h */,
-				DE121B941790B4A3001517C3 /* SSL Handling */,
 			);
 			path = APNSServer;
 			sourceTree = "<group>";
@@ -172,6 +212,9 @@
 				DE121B921790B48F001517C3 /* ssl.c in Sources */,
 				DE121B971790C4F6001517C3 /* msg_queue.c in Sources */,
 				DE121B9D1790E546001517C3 /* msg_handler.c in Sources */,
+				DE121BA01790F0B2001517C3 /* util.c in Sources */,
+				DE121BA41790F67F001517C3 /* json.c in Sources */,
+				DE121BAB17910A06001517C3 /* client_interface.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

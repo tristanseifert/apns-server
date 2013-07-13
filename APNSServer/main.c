@@ -11,6 +11,7 @@
 #include "ansi_terminal_defs.h"
 
 #include "msg_handler.h"
+#include "client_interface.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,6 +35,9 @@ int main(int argc, const char * argv[]) {
     // Start threads
     msg_handler_begin();
     
+    // Set up listening socket
+    client_interface_set_up();
+    
     // Go into an infinite loop here
     while(1) {
         
@@ -43,8 +47,10 @@ int main(int argc, const char * argv[]) {
 void intHandler(int sig) {
     // Ignore the signal so it can't happen twice
     signal(sig, SIG_IGN);
+    printf(ANSI_BOLD ANSI_COLOR_RED "\nReceived Ctrl^C!\n" ANSI_RESET);
     
-    printf(ANSI_BOLD ANSI_COLOR_RED "\nReceived Ctrl^C!\nFlushing buffers and disconnecting socket.\n" ANSI_RESET);
+    printf(ANSI_BOLD "Stopping client handler...\n" ANSI_RESET);
+    client_interface_stop(1);    
     
     printf(ANSI_BOLD "Stopping message handler thread...\n" ANSI_RESET);
     msg_handler_end(1);

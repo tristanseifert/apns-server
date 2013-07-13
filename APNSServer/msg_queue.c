@@ -29,9 +29,6 @@ int msg_queue_insert(push_msg *message) {
 }
 
 #pragma mark - Linked lists
-// hooray for linked lists!
-static msg_queue_entry *msg_queue = NULL;
-
 /*
  * Searches through the queue to find the last entry.
  */

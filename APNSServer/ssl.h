@@ -26,7 +26,7 @@ typedef struct {
     SSL_METHOD *meth;
     X509 *server_cert;
     EVP_PKEY *pkey;
-    
+
     /* Socket Communications */
     struct sockaddr_in server_addr;
     struct hostent *host_info;

@@ -26,4 +26,16 @@
 // Location of the CA certificate (absolute)
 #define CA_CERT_PATH "/Users/tristanseifert/FaceReel/APNSServer/certs/CACerts/"
 
+// Number of bytes to allocate for hostname buffers
+#define HOSTNAME_BUF_SIZE 1024
+
+// Port that APNS server listens to for clients
+#define CLIENT_LISTEN_PORT 55427
+
+// Maximum number of clients to queue before refusing connections
+#define MAX_NUM_QUEUED_CLIENTS 16
+
+// Maximum size of messages received by clients
+#define MAX_CLIENT_MSG_SIZE 1024*4
+
 #endif

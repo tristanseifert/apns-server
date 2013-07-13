@@ -18,4 +18,7 @@ typedef struct {
 
 int msg_queue_insert(push_msg *message);
 
+// hooray for linked lists!
+static msg_queue_entry *msg_queue = NULL;
+
 #endif

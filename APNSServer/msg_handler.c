@@ -7,9 +7,11 @@
 //
 
 #include <stdio.h>
+#include <unistd.h>
 #include <pthread.h>
 
 #include "msg_handler.h"
+#include "msg_queue.h"
 
 static int msg_handler_should_run = 0;
 static pthread_t msg_handler_pthread;
@@ -21,7 +23,11 @@ void *msg_handler_thread(void *param) {
     printf("Message handler thread has started.\n");
     
     while(msg_handler_should_run) {
+        msg_queue_writelock = 1;
         
+        msg_queue_writelock = 0;
+        
+        usleep(100000); // wait 100 ms
     }
     
     pthread_exit(NULL);

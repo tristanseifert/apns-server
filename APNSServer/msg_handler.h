@@ -12,4 +12,6 @@
 int msg_handler_begin();
 void msg_handler_end(int haveMercy);
 
+static int msg_queue_writelock = 0;
+
 #endif
