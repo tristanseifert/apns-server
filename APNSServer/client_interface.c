@@ -182,7 +182,7 @@ void *client_interface_connection_handler(void *connection) {
         }
     }
     
-    printf("Read %li bytes from client.\n", bytes_read_total);
+    printf("Read %li bytes from client.\n%s\n", bytes_read_total, msg_buf);
     
     // try and parse JSON
     char *jsonErr = calloc(512, sizeof(char));
@@ -192,13 +192,28 @@ void *client_interface_connection_handler(void *connection) {
     if(!parsed) {
         write(sock, "err", 3);
         printf("Error parsing JSON: %s\n", jsonErr);
-    } else {
-        write(sock, "ok", 2);
-        printf("Parsed value at 0x%X\n\n", (int) parsed);
+    } else {        
+        if(parsed->type != json_object) {
+            write(sock, "err_type", 8);
+            printf("Expected json_object, got %i", parsed->type);
+            
+            // Free memory
+            free(parsed);
+            free(jsonErr);
+            
+            // Close socket
+            fflush(stdout);
+            close(sock);
+            
+            pthread_exit(NULL);
+        }
     }
+    // If we get down here, we should have a properly parsed JSON object
+    write(sock, "ok", 2);
     
     // Free memory
     free(parsed);
+    free(msg_buf);
     free(jsonErr);
     
     // Close socket
