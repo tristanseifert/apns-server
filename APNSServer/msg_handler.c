@@ -23,7 +23,7 @@ static int msg_handler_should_run = 0;
 static pthread_t msg_handler_pthread;
 
 void msg_handler_send_push(push_msg *message);
-extern inline char* msg_handler_convert_device_token(char *token);
+uint8_t* msg_handler_convert_device_token(char *token);
 
 /*
  * This is the code that's executed in the message handling thread
@@ -89,9 +89,7 @@ void *msg_handler_thread(void *param) {
 /*
  * Serialises a message, then transmits it to the APNS servers.
  */
-void msg_handler_send_push(push_msg *message) {
-    /* message format is, |COMMAND|TOKENLEN|TOKEN|PAYLOADLEN|PAYLOAD| */
-  
+void msg_handler_send_push(push_msg *message) {  
     // set up json dict
     json_t *apsDict = json_object();
     json_t *jsonRoot = json_object();
@@ -111,11 +109,11 @@ void msg_handler_send_push(push_msg *message) {
                         
     // encode
     char *jsonText = json_dumps(apsDict, JSON_ENSURE_ASCII | JSON_COMPACT);
-    printf("Encoded JSON: %s\n", jsonText);
     
     size_t jsonLength = strlen(jsonText);
     
     // set up buffer
+    // message format is, |COMMAND|TOKENLEN|TOKEN|PAYLOADLEN|PAYLOAD|
     int requiredMsgBufSize = (int) (jsonLength + 512); // Length of JSON plus header buf
     char *messageBuffer = malloc(sizeof(char) * requiredMsgBufSize);
     memset(messageBuffer, 0x00, sizeof(char) * requiredMsgBufSize);
@@ -133,9 +131,17 @@ void msg_handler_send_push(push_msg *message) {
     msgBufWrite += sizeof(uint16_t);
     
     // write device token
-    char *binaryToken = msg_handler_convert_device_token(message->deviceID);
+    uint8_t *binaryToken = msg_handler_convert_device_token(message->deviceID);
     memcpy(msgBufWrite, binaryToken, 32);
     msgBufWrite += 32;
+    
+/*    uint8_t *bTkRd = binaryToken;
+    for(int i =0; i < 32; i++) {
+        printf("%.2x", *bTkRd);
+        bTkRd++;
+    }
+    
+    printf("\n%s\n", message->deviceID);*/
     
     // payload length
     memcpy(msgBufWrite, &networkOrderPayloadLength, sizeof(uint16_t));
@@ -156,28 +162,27 @@ void msg_handler_send_push(push_msg *message) {
     free(messageBuffer);
 }
 
-inline char* msg_handler_convert_device_token(char *token) {
-    int i = 0;
-    int j = 0;
+/*
+ * Converts a device token in the string representation to a binary rep in
+ * memory.
+ */
+uint8_t* msg_handler_convert_device_token(char *token) {
     int tmpi;
     char tmp[3];
-    char *deviceTokenBinary = malloc(34);
-    memset(deviceTokenBinary, 0x00, 34);
+    tmp[2] = 0x00;
     
-    while(i < strlen(token)) {
-        if(token[i] == ' ') {
-            i++;
-        } else {
-            tmp[0] = token[i];
-            tmp[1] = token[i + 1];
-            tmp[2] = '\0';
-            
-            sscanf(tmp, "%x", &tmpi);
-            deviceTokenBinary[j] = tmpi;
-            
-            i += 2;
-            j++;
-        }
+    uint8_t *deviceTokenBinary = malloc(32);
+    uint8_t *deviceTokenBinaryWr = deviceTokenBinary;
+    memset(deviceTokenBinary, 0x00, 32);
+    
+    for (int i = 0; i < 32; i++) {
+        tmp[0] = *token++;
+        tmp[1] = *token++;
+        
+        sscanf(tmp, "%x", &tmpi);
+        
+        *deviceTokenBinaryWr = tmpi & 0xFF;
+        deviceTokenBinaryWr++;
     }
     
     return deviceTokenBinary;
