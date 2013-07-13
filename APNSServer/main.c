@@ -24,7 +24,7 @@ void intHandler(int sig);
 int main(int argc, const char * argv[]) {
     printf(ANSI_BOLD "Establishing SSL connection to Apple servers...\n" ANSI_RESET);
     
-    shared_SSL_connection = SSL_Connect(APNS_HOST, APNS_PORT, RSA_CLIENT_CERT, RSA_CLIENT_KEY, CA_CERT_PATH);
+    SSL_Connect(APNS_HOST, APNS_PORT, RSA_CLIENT_CERT, RSA_CLIENT_KEY, CA_CERT_PATH);
     
     printf(ANSI_BOLD ANSI_COLOR_GREEN "\nSocket connected!\n\n" ANSI_RESET);
     
@@ -68,7 +68,7 @@ void intHandler(int sig) {
     
     printf(ANSI_BOLD "Disconnecting socket and destroying SSL context...\n" ANSI_RESET);
     // Disconnect SSL socket
-    SSL_Disconnect(shared_SSL_connection);
+    SSL_Disconnect((SSLConn *) SSL_get_shared_context());
     exit(0);
 }
 

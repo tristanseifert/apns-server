@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <openssl/err.h>
 
+volatile static SSLConn *shared_SSL_connection = NULL;
+
 /*
  * This function sets up a valid SSL connection and initialises the SSL library.
  */
@@ -113,6 +115,8 @@ SSLConn *SSL_Connect(const char *host, int port, const char *certfile, const cha
         exit(1);
     }
     
+    shared_SSL_connection = sslcon;
+    
     return sslcon;
 }
 
@@ -150,6 +154,12 @@ void SSL_Disconnect(SSLConn *sslcon) {
     }
 }
 
+volatile SSLConn *SSL_get_shared_context() {
+    return shared_SSL_connection;
+}
+
 inline int ssl_write_to_sock(SSLConn *conn, void *buf, int numBytes) {
+    printf("SSL connection: 0x%X\nBuffer: 0x%X\nCopy %i bytes\n", (int) conn, (int) buf, numBytes);
+    
     return SSL_write(conn->ssl, buf, numBytes);
 }
