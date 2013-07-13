@@ -149,3 +149,7 @@ void SSL_Disconnect(SSLConn *sslcon) {
         sslcon = NULL;
     }
 }
+
+inline int ssl_write_to_sock(SSLConn *conn, void *buf, int numBytes) {
+    return SSL_write(conn->ssl, buf, numBytes);
+}

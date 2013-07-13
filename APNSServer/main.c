@@ -21,8 +21,6 @@
 
 void intHandler(int sig);
 
-static SSLConn *shared_SSL_connection;
-
 int main(int argc, const char * argv[]) {
     printf(ANSI_BOLD "Establishing SSL connection to Apple servers...\n" ANSI_RESET);
     
@@ -32,6 +30,8 @@ int main(int argc, const char * argv[]) {
     
     // Trap Ctrl+C so we can clean up the connection (and flush queue)
     signal(SIGINT, intHandler);
+    
+    msg_queue_begin();
     
     // Start threads
     int error = msg_handler_begin();

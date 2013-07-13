@@ -38,4 +38,7 @@
 // Maximum size of messages received by clients
 #define MAX_CLIENT_MSG_SIZE 1024*4
 
+// Various debugging defines (should be commented out when compiled for prod)
+#define LINKED_LIST_DEBUG 1
+
 #endif

@@ -17,8 +17,9 @@ typedef struct {
 } msg_queue_entry;
 
 int msg_queue_insert(push_msg *message);
+void msg_queue_begin();
+void msg_queue_print_pretty_rep();
+volatile msg_queue_entry *msg_queue_get_ptr();
 
-// hooray for linked lists!
-static msg_queue_entry *msg_queue = NULL;
 
 #endif

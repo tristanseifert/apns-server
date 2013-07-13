@@ -20,7 +20,7 @@
 
 #include "json.h"
 #include "msg.h"
-#include "msg_handler.h"
+#include "msg_queue.h"
 
 #include "ansi_terminal_defs.h"
 #include "apns_config.h"
@@ -162,7 +162,7 @@ void *client_interface_connection_handler(void *connection) {
         
         // check if we have \n
         if(strcmp(msg_buf_write_ptr, "\n") == 0) {
-            printf("Received \\n.\n");
+//            printf("Received \\n.\n");
             break;
         }
         
@@ -185,7 +185,7 @@ void *client_interface_connection_handler(void *connection) {
         }
     }
     
-    printf("Read %li bytes from client.\n%s\n", bytes_read_total, msg_buf);
+//    printf("Read %li bytes from client.\n%s\n", bytes_read_total, msg_buf);
     
     // try and parse JSON
     char *jsonErr = calloc(512, sizeof(char));
@@ -263,7 +263,13 @@ void *client_interface_connection_handler(void *connection) {
     free(jsonErr);
     close(sock);
     
-    printf("Text: %s\nDevice: %s\n", message->text, message->deviceID);
+//    printf("Text: %s\nDevice: %s\n", message->text, message->deviceID);
+    
+    int error = msg_queue_insert(message); // shove message into queue
+    if(error) {
+        printf("Error adding to queue: %i\n\n", error);
+    }
+    
     
     fflush(stdout);
     

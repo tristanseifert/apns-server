@@ -25,9 +25,19 @@ void *msg_handler_thread(void *param) {
     while(msg_handler_should_run) {
         msg_queue_writelock = 1;
         
+        // check the message queue actually exists
+        if(msg_queue_get_ptr() != NULL) {
+            msg_queue_print_pretty_rep();
+        } else {
+            printf("No messages to process.\n");
+        }
+        
+        fflush(stdout);
+        
         msg_queue_writelock = 0;
         
-        usleep(100000); // wait 100 ms
+        sleep(5);
+        // usleep(100000); // wait 100 ms
     }
     
     pthread_exit(NULL);
