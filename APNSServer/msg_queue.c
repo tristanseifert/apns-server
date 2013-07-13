@@ -11,9 +11,9 @@
 
 #include "msg_queue.h"
 
-inline msg_queue_entry *msg_queue_find_last_queue_entry();
-inline int msg_queue_allocate_memory(int numItems);
-inline msg_queue_entry *msg_queue_find_empty_entry();
+extern inline msg_queue_entry *msg_queue_find_last_queue_entry();
+extern inline int msg_queue_allocate_memory(int numItems);
+extern inline msg_queue_entry *msg_queue_find_empty_entry();
 
 int msg_queue_insert(push_msg *message) {
     msg_queue_entry *entry = msg_queue_find_empty_entry();

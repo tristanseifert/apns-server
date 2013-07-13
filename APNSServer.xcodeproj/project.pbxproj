@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DE121B921790B48F001517C3 /* ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B911790B48F001517C3 /* ssl.c */; };
 		DE121B971790C4F6001517C3 /* msg_queue.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B961790C4F6001517C3 /* msg_queue.c */; };
+		DE121B9D1790E546001517C3 /* msg_handler.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B9C1790E545001517C3 /* msg_handler.c */; };
 		DE9AD7141751B654005F8C8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = DE9AD7131751B654005F8C8D /* main.c */; };
 		DE9AD7161751B654005F8C8D /* APNSServer.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = DE9AD7151751B654005F8C8D /* APNSServer.1 */; };
 		DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AD71C1751B680005F8C8D /* libssl.dylib */; };
@@ -33,6 +34,8 @@
 		DE121B961790C4F6001517C3 /* msg_queue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = msg_queue.c; sourceTree = "<group>"; };
 		DE121B981790C4FF001517C3 /* msg_queue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msg_queue.h; sourceTree = "<group>"; };
 		DE121B9A1790C626001517C3 /* msg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msg.h; sourceTree = "<group>"; };
+		DE121B9B1790E529001517C3 /* msg_handler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = msg_handler.h; sourceTree = "<group>"; };
+		DE121B9C1790E545001517C3 /* msg_handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = msg_handler.c; sourceTree = "<group>"; };
 		DE9AD7101751B654005F8C8D /* APNSServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APNSServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9AD7131751B654005F8C8D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		DE9AD7151751B654005F8C8D /* APNSServer.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = APNSServer.1; sourceTree = "<group>"; };
@@ -67,6 +70,8 @@
 			isa = PBXGroup;
 			children = (
 				DE121B9A1790C626001517C3 /* msg.h */,
+				DE121B9B1790E529001517C3 /* msg_handler.h */,
+				DE121B9C1790E545001517C3 /* msg_handler.c */,
 			);
 			name = "Message Handling";
 			sourceTree = "<group>";
@@ -166,6 +171,7 @@
 				DE9AD7141751B654005F8C8D /* main.c in Sources */,
 				DE121B921790B48F001517C3 /* ssl.c in Sources */,
 				DE121B971790C4F6001517C3 /* msg_queue.c in Sources */,
+				DE121B9D1790E546001517C3 /* msg_handler.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +247,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_OPTIMIZATION_LEVEL = 3;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

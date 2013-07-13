@@ -7,8 +7,10 @@ Features of this server will include:
 * Message templates
 * Single persistent connection to Apple's servers
 
-### Support
+### Compatibility
 The code should run without much issues on any system that C can be compiled for, and has support for sockets. OpenSSL is required to be available (both headers to build and library to link against) for the SSL communications with Apple's servers. The code has been developed on Mac OS X 10.8, but should also be able to be compiled on most other *nix-like systems.
+
+It helps to compile this code with the `-O3` compiler setting if binary size is not an issue.
 
 ### Source Code License ###
 The source code is released under the [Simplified BSD License](http://opensource.org/licenses/bsd-license.php):
