@@ -16,11 +16,13 @@
 #include "msg.h"
 
 #include "ssl.h"
-
+#include "jansson.h"
 #include "apns_config.h"
 
 static int msg_handler_should_run = 0;
 static pthread_t msg_handler_pthread;
+
+void msg_handler_send_push(push_msg *message);
 
 /*
  * This is the code that's executed in the message handling thread
@@ -52,8 +54,9 @@ void *msg_handler_thread(void *param) {
 #ifdef MSG_PROCESSING_DEBUG
                     printf("Notification title \"%s\" sent to %s\n", msg->text, msg->deviceID);
 #endif
+                    msg_handler_send_push(msg);
                     
-                    // mark as empty
+                    // free memory
                     free(read_ptr->content);
                     read_ptr->content = NULL;
                 }
@@ -80,6 +83,44 @@ void *msg_handler_thread(void *param) {
     }
     
     pthread_exit(NULL);
+}
+
+/*
+ * Serialises a message, then transmits it to the APNS servers.
+ */
+void msg_handler_send_push(push_msg *message) {
+    // 		$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
+  
+    // set up json dict
+    json_t *apsDict = json_object();
+    json_t *jsonRoot = json_object();
+    
+    // set up the text
+    if(message->text != NULL) {
+        json_object_set(apsDict, "alert", json_string(message->text));
+    } if(message->sound) {
+        json_object_set(apsDict, "sound", json_string(message->text));
+    } if(message->badgeNumber != -1) {
+        json_object_set(apsDict, "badge", json_integer(message->badgeNumber));
+    } if(message->custPayload) {
+        json_object_set(jsonRoot, "c", json_string(message->custPayload));
+    }
+    
+    json_object_set(jsonRoot, "aps", apsDict);
+                        
+    // encode
+    char *jsonText = json_dumps(apsDict, JSON_ENSURE_ASCII | JSON_COMPACT);
+    printf("Encoded JSON: %s\n", jsonText);
+    
+    // set up buffer
+    int requiredMsgBufSize = (int) (strlen(jsonText) + 512); // Length of JSON plus header buf
+    char *messageBuffer = malloc(sizeof(char) * requiredMsgBufSize);
+    memset(messageBuffer, 0x00, sizeof(char) * requiredMsgBufSize);
+    
+//    ssl_write_to_sock((SSLConn *) shared_SSL_connection, messageBuffer, requiredMsgBufSize);
+    
+    free(jsonText);
+    free(messageBuffer);
 }
 
 /*
@@ -110,16 +151,4 @@ void msg_handler_end(int haveMercy) {
     if(!haveMercy) {
         pthread_cancel(msg_handler_pthread);
     }
-}
-
-/*
- * Serialises a message, then transmits it to the APNS servers.
- */
-void msg_handler_send_push(push_msg *message) {
-    // 		$msg = chr(0) . pack('n', 32) . pack('H*', $deviceToken) . pack('n', strlen($payload)) . $payload;
-    int requiredMsgBufSize = 4096;
-    char *messageBuffer = malloc(sizeof(char) * requiredMsgBufSize);
-    memset(messageBuffer, 0x00, sizeof(char) * requiredMsgBufSize);
-    
-    ssl_write_to_sock((SSLConn *) shared_SSL_connection, messageBuffer, requiredMsgBufSize);
 }

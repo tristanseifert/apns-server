@@ -11,8 +11,17 @@
 		DE121B971790C4F6001517C3 /* msg_queue.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B961790C4F6001517C3 /* msg_queue.c */; };
 		DE121B9D1790E546001517C3 /* msg_handler.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B9C1790E545001517C3 /* msg_handler.c */; };
 		DE121BA01790F0B2001517C3 /* util.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121B9F1790F0B2001517C3 /* util.c */; };
-		DE121BA41790F67F001517C3 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121BA21790F67F001517C3 /* json.c */; };
 		DE121BAB17910A06001517C3 /* client_interface.c in Sources */ = {isa = PBXBuildFile; fileRef = DE121BAA17910A06001517C3 /* client_interface.c */; };
+		DE96F804179204420093F03D /* dump.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F7F4179204420093F03D /* dump.c */; };
+		DE96F805179204420093F03D /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F7F5179204420093F03D /* error.c */; };
+		DE96F806179204420093F03D /* hashtable.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F7F6179204420093F03D /* hashtable.c */; };
+		DE96F807179204420093F03D /* load.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F7FB179204420093F03D /* load.c */; };
+		DE96F808179204420093F03D /* memory.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F7FC179204420093F03D /* memory.c */; };
+		DE96F809179204420093F03D /* pack_unpack.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F7FD179204420093F03D /* pack_unpack.c */; };
+		DE96F80A179204420093F03D /* strbuffer.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F7FE179204420093F03D /* strbuffer.c */; };
+		DE96F80B179204420093F03D /* strconv.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F800179204420093F03D /* strconv.c */; };
+		DE96F80C179204420093F03D /* utf.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F801179204420093F03D /* utf.c */; };
+		DE96F80D179204420093F03D /* value.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F803179204420093F03D /* value.c */; };
 		DE9AD7141751B654005F8C8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = DE9AD7131751B654005F8C8D /* main.c */; };
 		DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AD71C1751B680005F8C8D /* libssl.dylib */; };
 /* End PBXBuildFile section */
@@ -27,10 +36,24 @@
 		DE121B9C1790E545001517C3 /* msg_handler.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = msg_handler.c; sourceTree = "<group>"; };
 		DE121B9F1790F0B2001517C3 /* util.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = util.c; sourceTree = "<group>"; };
 		DE121BA11790F0B8001517C3 /* util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
-		DE121BA21790F67F001517C3 /* json.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = json.c; path = "json-parser/json.c"; sourceTree = SOURCE_ROOT; };
-		DE121BA31790F67F001517C3 /* json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = json.h; path = "json-parser/json.h"; sourceTree = SOURCE_ROOT; };
 		DE121BA9179109D3001517C3 /* client_interface.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = client_interface.h; path = APNSServer/client_interface.h; sourceTree = "<group>"; };
 		DE121BAA17910A06001517C3 /* client_interface.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = client_interface.c; path = APNSServer/client_interface.c; sourceTree = "<group>"; };
+		DE96F7F4179204420093F03D /* dump.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = dump.c; path = jansson/src/dump.c; sourceTree = SOURCE_ROOT; };
+		DE96F7F5179204420093F03D /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = error.c; path = jansson/src/error.c; sourceTree = SOURCE_ROOT; };
+		DE96F7F6179204420093F03D /* hashtable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = hashtable.c; path = jansson/src/hashtable.c; sourceTree = SOURCE_ROOT; };
+		DE96F7F7179204420093F03D /* hashtable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = hashtable.h; path = jansson/src/hashtable.h; sourceTree = SOURCE_ROOT; };
+		DE96F7F8179204420093F03D /* jansson_config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jansson_config.h; path = jansson/src/jansson_config.h; sourceTree = SOURCE_ROOT; };
+		DE96F7F9179204420093F03D /* jansson_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jansson_private.h; path = jansson/src/jansson_private.h; sourceTree = SOURCE_ROOT; };
+		DE96F7FA179204420093F03D /* jansson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jansson.h; path = jansson/src/jansson.h; sourceTree = SOURCE_ROOT; };
+		DE96F7FB179204420093F03D /* load.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = load.c; path = jansson/src/load.c; sourceTree = SOURCE_ROOT; };
+		DE96F7FC179204420093F03D /* memory.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = memory.c; path = jansson/src/memory.c; sourceTree = SOURCE_ROOT; };
+		DE96F7FD179204420093F03D /* pack_unpack.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pack_unpack.c; path = jansson/src/pack_unpack.c; sourceTree = SOURCE_ROOT; };
+		DE96F7FE179204420093F03D /* strbuffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = strbuffer.c; path = jansson/src/strbuffer.c; sourceTree = SOURCE_ROOT; };
+		DE96F7FF179204420093F03D /* strbuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = strbuffer.h; path = jansson/src/strbuffer.h; sourceTree = SOURCE_ROOT; };
+		DE96F800179204420093F03D /* strconv.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = strconv.c; path = jansson/src/strconv.c; sourceTree = SOURCE_ROOT; };
+		DE96F801179204420093F03D /* utf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf.c; path = jansson/src/utf.c; sourceTree = SOURCE_ROOT; };
+		DE96F802179204420093F03D /* utf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utf.h; path = jansson/src/utf.h; sourceTree = SOURCE_ROOT; };
+		DE96F803179204420093F03D /* value.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = value.c; path = jansson/src/value.c; sourceTree = SOURCE_ROOT; };
 		DE9AD7101751B654005F8C8D /* APNSServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APNSServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9AD7131751B654005F8C8D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		DE9AD71C1751B680005F8C8D /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
@@ -92,8 +115,22 @@
 		DE121BA51790F683001517C3 /* JSON */ = {
 			isa = PBXGroup;
 			children = (
-				DE121BA21790F67F001517C3 /* json.c */,
-				DE121BA31790F67F001517C3 /* json.h */,
+				DE96F7F4179204420093F03D /* dump.c */,
+				DE96F7F5179204420093F03D /* error.c */,
+				DE96F7F6179204420093F03D /* hashtable.c */,
+				DE96F7F7179204420093F03D /* hashtable.h */,
+				DE96F7F8179204420093F03D /* jansson_config.h */,
+				DE96F7F9179204420093F03D /* jansson_private.h */,
+				DE96F7FA179204420093F03D /* jansson.h */,
+				DE96F7FB179204420093F03D /* load.c */,
+				DE96F7FC179204420093F03D /* memory.c */,
+				DE96F7FD179204420093F03D /* pack_unpack.c */,
+				DE96F7FE179204420093F03D /* strbuffer.c */,
+				DE96F7FF179204420093F03D /* strbuffer.h */,
+				DE96F800179204420093F03D /* strconv.c */,
+				DE96F801179204420093F03D /* utf.c */,
+				DE96F802179204420093F03D /* utf.h */,
+				DE96F803179204420093F03D /* value.c */,
 			);
 			name = JSON;
 			sourceTree = "<group>";
@@ -196,8 +233,17 @@
 				DE121B971790C4F6001517C3 /* msg_queue.c in Sources */,
 				DE121B9D1790E546001517C3 /* msg_handler.c in Sources */,
 				DE121BA01790F0B2001517C3 /* util.c in Sources */,
-				DE121BA41790F67F001517C3 /* json.c in Sources */,
 				DE121BAB17910A06001517C3 /* client_interface.c in Sources */,
+				DE96F804179204420093F03D /* dump.c in Sources */,
+				DE96F805179204420093F03D /* error.c in Sources */,
+				DE96F806179204420093F03D /* hashtable.c in Sources */,
+				DE96F807179204420093F03D /* load.c in Sources */,
+				DE96F808179204420093F03D /* memory.c in Sources */,
+				DE96F809179204420093F03D /* pack_unpack.c in Sources */,
+				DE96F80A179204420093F03D /* strbuffer.c in Sources */,
+				DE96F80B179204420093F03D /* strconv.c in Sources */,
+				DE96F80C179204420093F03D /* utf.c in Sources */,
+				DE96F80D179204420093F03D /* value.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

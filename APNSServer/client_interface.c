@@ -18,7 +18,7 @@
 #include <netdb.h>
 #include <pthread.h>
 
-#include "json.h"
+#include "jansson.h"
 #include "msg.h"
 #include "msg_queue.h"
 
@@ -31,7 +31,7 @@ static pthread_t client_service_thread;
 
 void *client_interface_listening_thread(void *param);
 void *client_interface_connection_handler(void *connection);
-extern inline inline char* copy_json_info(json_value *value);
+extern inline inline char* copy_json_info(json_t *value);
 
 /*
  * Sets up a socket on which we listen for clients. Also creates the listening
@@ -188,29 +188,26 @@ void *client_interface_connection_handler(void *connection) {
 //    printf("Read %li bytes from client.\n%s\n", bytes_read_total, msg_buf);
     
     // try and parse JSON
-    char *jsonErr = calloc(512, sizeof(char));
-    json_settings settings = { 0 };
-    json_value *parsed = json_parse_ex(&settings, msg_buf, MAX_CLIENT_MSG_SIZE, jsonErr);
+    json_error_t json_error;
+    json_t *parsed = json_loads(msg_buf, 0, &json_error);
+    free(msg_buf);
     
     if(!parsed) {
         write(sock, "err", 3);
-        printf("Error parsing JSON: %s\n", jsonErr);
+        printf("Error parsing JSON at line %i: %s\n", json_error.line, json_error.text);
         
         // free memory, close socket
-        free(jsonErr);
         free(msg_buf);
         close(sock);
         
         pthread_exit(NULL);
     } else {
-        if(parsed->type != json_object) {
+        if(!json_is_object(parsed)) {
             write(sock, "err_type", 8);
-            printf("Expected json_object, got %i", parsed->type);
+            printf("Expected JSON object, got %i", parsed->type);
             
             // free memory, close socket
             free(parsed);
-            free(jsonErr);
-            free(msg_buf);
             close(sock);
             
             pthread_exit(NULL);
@@ -228,40 +225,21 @@ void *client_interface_connection_handler(void *connection) {
         
         // free memory, close socket
         free(parsed);
-        free(jsonErr);
-        free(msg_buf);
         close(sock);
         
         pthread_exit(NULL);        
     }
     
-    // loop through all the items in the objectoid
-    for (int i = 0; i < parsed->u.object.length; i++) {
-        char *name = parsed->u.object.values[i].name;
-        json_value *value = parsed->u.object.values[i].value;
-
-        // compare name against all keys
-        if(strcmp("text", name) == 0 && value->type == json_string) {
-            message->text = copy_json_info(value);
-        } else if(strcmp("sound", name) == 0 && value->type == json_string) {
-            message->sound = copy_json_info(value);
-        } else if(strcmp("badge", name) == 0 && value->type == json_integer) {
-            message->badgeNumber = (int) value->u.integer;
-        } else if(strcmp("custom", name) == 0 && value->type == json_string) {
-            message->custPayload = copy_json_info(value);
-        } else if(strcmp("key", name) == 0 && value->type == json_string) {
-            message->deviceID = copy_json_info(value);
-        } else {
-            printf("Encountered unexpected token: %s\n", name);
-        }
-    }
+    message->text = copy_json_info(json_object_get(parsed, "text"));
+    message->sound = copy_json_info(json_object_get(parsed, "sound"));
+    message->badgeNumber = (int) json_integer_value(json_object_get(parsed, "badge"));
+    message->custPayload = copy_json_info(json_object_get(parsed, "custom"));
+    message->deviceID = copy_json_info(json_object_get(parsed, "key"));
     
     write(sock, "ok", 2);
     
     // Free memory, close socket
     free(parsed);
-    free(msg_buf);
-    free(jsonErr);
     close(sock);
     
 //    printf("Text: %s\nDevice: %s\n", message->text, message->deviceID);
@@ -270,7 +248,6 @@ void *client_interface_connection_handler(void *connection) {
     if(error) {
         printf("Error adding to queue: %i\n\n", error);
     }
-    
     
     fflush(stdout);
     
@@ -281,10 +258,19 @@ void *client_interface_connection_handler(void *connection) {
  * This inline copies a string from the json_value struct to the destination
  * string buffer, ensuring that memory is allocated.
  */
-inline char* copy_json_info(json_value *value) {
-    char *destBuff = malloc(value->u.string.length + 2); // alloc mem + 2
-    memset(destBuff, 0x00, sizeof(value->u.string.length + 2));
-    strncpy(destBuff, value->u.string.ptr, value->u.string.length); // copy
+inline char* copy_json_info(json_t *value) {
+    if(!json_is_string(value)) {
+        return NULL;
+    }
+    
+    // convert string and get length
+    const char *cString = json_string_value(value);
+    size_t stringLength = strlen(cString);
+    
+    // alloc mem and copy
+    char *destBuff = malloc(stringLength + 2); // alloc mem + 2
+    memset(destBuff, 0x00, (sizeof(char) * stringLength + 2));
+    strncpy(destBuff, cString, stringLength); // copy
     
     return destBuff; // return
 }
