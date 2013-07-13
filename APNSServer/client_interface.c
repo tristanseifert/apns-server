@@ -156,6 +156,7 @@ void *client_interface_connection_handler(void *connection) {
     while((bytes_read = read(sock, msg_buf_write_ptr, 1)) > 0) {
         bytes_read_total += bytes_read;
         
+        // Check if we have \n
         if(strcmp(msg_buf_write_ptr, "\n") == 0) {
             printf("Received \\n.\n");
             break;
@@ -179,8 +180,12 @@ void *client_interface_connection_handler(void *connection) {
         printf("Parsed value at 0x%X\n\n", (int) parsed);
     }
     
-    fflush(stdout);
+    // Free memory
+    free(parsed);
+    free(jsonErr);
     
+    // Close socket
+    fflush(stdout);
     close(sock);
     
     return NULL;
