@@ -20,6 +20,7 @@
 
 #include "json.h"
 
+#include "ansi_terminal_defs.h"
 #include "apns_config.h"
 
 static int client_socket = 0;
@@ -152,17 +153,33 @@ void *client_interface_connection_handler(void *connection) {
     long bytes_read_total = 0;
     long bytes_read = 0;
     
-    // Read one byte at a time
+    // read one byte at a time
     while((bytes_read = read(sock, msg_buf_write_ptr, 1)) > 0) {
         bytes_read_total += bytes_read;
         
-        // Check if we have \n
+        // check if we have \n
         if(strcmp(msg_buf_write_ptr, "\n") == 0) {
             printf("Received \\n.\n");
             break;
         }
         
         msg_buf_write_ptr += bytes_read;
+        
+        // have we got MAX_CLIENT_MSG_SIZE bytes and no \n?
+        if(bytes_read_total == MAX_CLIENT_MSG_SIZE) {
+            write(sock, "err", 3);
+            printf(ANSI_COLOR_RED
+                   "Client tried to write over 4K request data - potential"
+                   "buffer overflow exploit attempt!" ANSI_RESET);
+            
+            write(sock, "overflow", 8);
+            
+            // Close socket
+            fflush(stdout);
+            close(sock);
+            
+            pthread_exit(NULL);
+        }
     }
     
     printf("Read %li bytes from client.\n", bytes_read_total);
