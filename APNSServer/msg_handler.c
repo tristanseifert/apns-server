@@ -20,7 +20,8 @@
 #include "jansson.h"
 #include "apns_config.h"
 
-static int msg_handler_should_run = 0;
+volatile uint8_t msg_handler_should_run = 0;
+volatile uint8_t handler_has_quit = 0;
 static pthread_t msg_handler_pthread;
 
 void msg_handler_send_push(push_msg *message);
@@ -32,7 +33,7 @@ uint8_t* msg_handler_convert_device_token(char *token);
 void *msg_handler_thread(void *param) {
     printf("Message handler thread has started.\n");
     
-    while(msg_handler_should_run) {
+    while(msg_handler_should_run == 1) {
         msg_queue_writelock = 1;
         
         // check the message queue actually exists
@@ -84,6 +85,8 @@ void *msg_handler_thread(void *param) {
         // usleep(100000); // wait 100 ms
     }
     
+    handler_has_quit = 1;
+    
     pthread_exit(NULL);
 }
 
@@ -95,7 +98,7 @@ void msg_handler_send_push(push_msg *message) {
     json_t *apsDict = json_object();
     json_t *jsonRoot = json_object();
     
-    // set up the text
+    // create JSON dict
     if(message->text) {
         json_object_set(apsDict, "alert", json_string(message->text));
     } else if(message->localized_template) {
@@ -135,7 +138,9 @@ void msg_handler_send_push(push_msg *message) {
                         
     // encode
     char *jsonText = json_dumps(jsonRoot, JSON_ENSURE_ASCII | JSON_COMPACT);
+#ifdef MSG_PROCESSING_DEBUG
     printf("Encoded JSON: %s\n", jsonText);
+#endif
     
     size_t jsonLength = strlen(jsonText);
     
@@ -172,14 +177,6 @@ void msg_handler_send_push(push_msg *message) {
     memcpy(msgBufWrite, binaryToken, 32);
     msgBufWrite += 32;
     
-/*    uint8_t *bTkRd = binaryToken;
-    for(int i =0; i < 32; i++) {
-        printf("%.2x", *bTkRd);
-        bTkRd++;
-    }
-    
-    printf("\n%s\n", message->deviceID); */
-    
     // payload length
     memcpy(msgBufWrite, &networkOrderPayloadLength, sizeof(uint16_t));
     msgBufWrite += sizeof(uint16_t);
@@ -195,6 +192,7 @@ void msg_handler_send_push(push_msg *message) {
         printf("SSL error sending notification: %i\n", error);
     }
     
+#ifdef MSG_PROCESSING_DEBUG
     printf("Binary APNS message:\n");
     uint8_t *bTkRd = messageBuffer;
     for(int i =0; i < (msgBufWrite - messageBuffer); i++) {
@@ -202,6 +200,7 @@ void msg_handler_send_push(push_msg *message) {
         bTkRd++;
     }    
     printf("\n\n");
+#endif
     
     free(jsonText);
     free(binaryToken);
@@ -261,5 +260,7 @@ void msg_handler_end(int haveMercy) {
     // just kill the thread
     if(!haveMercy) {
         pthread_cancel(msg_handler_pthread);
+    } else {
+        while(handler_has_quit == 0);
     }
 }

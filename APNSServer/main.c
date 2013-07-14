@@ -10,6 +10,7 @@
 #include "apns_config.h"
 #include "ansi_terminal_defs.h"
 
+#include "msg_queue.h"
 #include "msg_handler.h"
 #include "client_interface.h"
 

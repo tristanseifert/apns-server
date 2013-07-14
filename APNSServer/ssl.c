@@ -7,6 +7,7 @@
 //
 
 #include "ssl.h"
+#include "apns_config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -163,7 +164,9 @@ volatile SSLConn *SSL_get_shared_context() {
 }
 
 inline int ssl_write_to_sock(SSLConn *conn, void *buf, int numBytes) {
+#ifdef SSL_DEBUG
     printf("SSL connection: 0x%X\nBuffer: 0x%X\nCopy %i bytes\n", (int) conn, (int) buf, numBytes);
+#endif
     
     return SSL_write(conn->ssl, buf, numBytes);
 }

@@ -26,7 +26,8 @@
 #include "apns_config.h"
 
 static int client_socket = 0;
-static int client_should_run = 0;
+volatile uint8_t client_should_run = 0;
+volatile uint8_t client_has_quit = 0;
 static pthread_t client_service_thread;
 
 void *client_interface_listening_thread(void *param);
@@ -104,12 +105,8 @@ int client_interface_get_connection() {
  * If mercy == 0, the thread is just killed and socket closed.
  */
 void client_interface_stop(int mercy) {
-    if(!mercy) {
-        pthread_cancel(client_service_thread);
-        close(client_socket);
-    } else {
-        client_should_run = 0;
-    }
+    pthread_cancel(client_service_thread);
+    close(client_socket);
 }
 
 /*
@@ -122,22 +119,24 @@ void *client_interface_listening_thread(void *param) {
            , CLIENT_LISTEN_PORT);
     fflush(stdout);
     
-    while(client_should_run) {
+    while(client_should_run == 1) {
         if((t = client_interface_get_connection()) < 0) {
             if(errno == EINTR) { // The socket might sometimes get EINTR
                 continue;
             }
             
             perror("Accept client connection"); // die, we got an unknown error
+        } else {
+            pthread_t thread; // we don't really care about this thread later, it'll die eventually
+            pthread_create(&thread, NULL, client_interface_connection_handler, (void *) &t);
         }
-        
-        pthread_t thread; // we don't really care about this thread later, it'll die eventually
-        pthread_create(&thread, NULL, client_interface_connection_handler, (void *) &t);
     }
     
     close(client_socket);
     
-    return NULL;
+    client_has_quit = 1;
+    
+    pthread_exit(NULL);
 }
 
 /*
@@ -146,6 +145,8 @@ void *client_interface_listening_thread(void *param) {
  * clients send into a push notification we can send out.
  */
 void *client_interface_connection_handler(void *connection) {
+    if(connection == NULL) return NULL;
+    
     int sock = *((int *) connection);
 
     printf("Client connected.\n");
@@ -257,7 +258,7 @@ void *client_interface_connection_handler(void *connection) {
     
     fflush(stdout);
     
-    return NULL;
+    pthread_exit(NULL);
 }
 
 /*

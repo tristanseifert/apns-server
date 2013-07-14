@@ -45,6 +45,7 @@
 #if APNS_DEBUG == 1
 #define LINKED_LIST_DEBUG 1
 #define MSG_PROCESSING_DEBUG 1
+#define SSL_DEBUG 1
 #endif
 
 #endif
