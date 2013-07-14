@@ -41,6 +41,9 @@
 // Maximum size of messages received by clients
 #define MAX_CLIENT_MSG_SIZE 1024*4
 
+// Number of milliseconds between push processing cycles
+#define PUSH_PROC_WAIT 5000
+
 // Various debugging defines (should be commented out when compiled for prod)
 #if APNS_DEBUG == 1
 #define LINKED_LIST_DEBUG 1

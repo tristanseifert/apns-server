@@ -69,7 +69,7 @@ void *msg_handler_thread(void *param) {
             }
             
 #ifdef MSG_PROCESSING_DEBUG
-            printf("Processed %i push notification(s).\n", numNotifsProc);
+            printf("Processed %i push notification(s).\n\n", numNotifsProc);
 #endif
         } else {
 #ifdef MSG_PROCESSING_DEBUG
@@ -81,8 +81,7 @@ void *msg_handler_thread(void *param) {
         
         msg_queue_writelock = 0;
         
-        sleep(5);
-        // usleep(100000); // wait 100 ms
+        usleep(PUSH_PROC_WAIT * 1000);
     }
     
     handler_has_quit = 1;
