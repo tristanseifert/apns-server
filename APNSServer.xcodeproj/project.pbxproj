@@ -22,6 +22,7 @@
 		DE96F80B179204420093F03D /* strconv.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F800179204420093F03D /* strconv.c */; };
 		DE96F80C179204420093F03D /* utf.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F801179204420093F03D /* utf.c */; };
 		DE96F80D179204420093F03D /* value.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F803179204420093F03D /* value.c */; };
+		DE96F81017930A8A0093F03D /* config_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = DE96F80F17930A8A0093F03D /* config_parser.c */; };
 		DE9AD7141751B654005F8C8D /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = DE9AD7131751B654005F8C8D /* main.c */; };
 		DE9AD71D1751B680005F8C8D /* libssl.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AD71C1751B680005F8C8D /* libssl.dylib */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,8 @@
 		DE96F801179204420093F03D /* utf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = utf.c; path = jansson/src/utf.c; sourceTree = SOURCE_ROOT; };
 		DE96F802179204420093F03D /* utf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = utf.h; path = jansson/src/utf.h; sourceTree = SOURCE_ROOT; };
 		DE96F803179204420093F03D /* value.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = value.c; path = jansson/src/value.c; sourceTree = SOURCE_ROOT; };
+		DE96F80F17930A8A0093F03D /* config_parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = config_parser.c; sourceTree = "<group>"; };
+		DE96F81217930AB20093F03D /* config_parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = config_parser.h; sourceTree = "<group>"; };
 		DE9AD7101751B654005F8C8D /* APNSServer */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = APNSServer; sourceTree = BUILT_PRODUCTS_DIR; };
 		DE9AD7131751B654005F8C8D /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		DE9AD71C1751B680005F8C8D /* libssl.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libssl.dylib; path = usr/lib/libssl.dylib; sourceTree = SDKROOT; };
@@ -145,6 +148,15 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
+		DE96F80E17930A320093F03D /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				DE96F80F17930A8A0093F03D /* config_parser.c */,
+				DE96F81217930AB20093F03D /* config_parser.h */,
+			);
+			name = Config;
+			sourceTree = "<group>";
+		};
 		DE9AD7071751B654005F8C8D = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +181,7 @@
 				DE121B951790C4DC001517C3 /* Message Handling */,
 				DE121B941790B4A3001517C3 /* SSL Handling */,
 				DE121BA617910939001517C3 /* Client Interfacing */,
+				DE96F80E17930A320093F03D /* Config */,
 				DE121B9E1790F0A1001517C3 /* Miscellaneous */,
 				DE9AD7131751B654005F8C8D /* main.c */,
 				DE9AD71E1751B72A005F8C8D /* main.h */,
@@ -244,6 +257,7 @@
 				DE96F80B179204420093F03D /* strconv.c in Sources */,
 				DE96F80C179204420093F03D /* utf.c in Sources */,
 				DE96F80D179204420093F03D /* value.c in Sources */,
+				DE96F81017930A8A0093F03D /* config_parser.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

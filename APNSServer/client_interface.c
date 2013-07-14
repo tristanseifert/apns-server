@@ -24,6 +24,7 @@
 
 #include "ansi_terminal_defs.h"
 #include "apns_config.h"
+#include "config_parser.h"
 
 static int client_socket = 0;
 volatile uint8_t client_should_run = 0;
@@ -53,7 +54,7 @@ int client_interface_set_up() {
     }
     
     sa.sin_family = hp->h_addrtype;
-    sa.sin_port = htons(CLIENT_LISTEN_PORT);
+    sa.sin_port = htons(config_get_number("Client_Listen_Port"));
     
     // create socket
     if((client_socket = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -68,7 +69,7 @@ int client_interface_set_up() {
         return 512;
     }
     
-    listen(client_socket, MAX_NUM_QUEUED_CLIENTS);
+    listen(client_socket, (int) config_get_number("Client_Max_Queue"));
     
     // Set up the listening thread
     client_should_run = 1;
@@ -115,8 +116,8 @@ void client_interface_stop(int mercy) {
 void *client_interface_listening_thread(void *param) {
     int t; // holds the connection we establish with clients
     
-    printf("Client listening thread active. Listening for clients on port %i...\n"
-           , CLIENT_LISTEN_PORT);
+    printf("Client listening thread active. Listening for clients on port %lli...\n"
+           , config_get_number("Client_Listen_Port"));
     fflush(stdout);
     
     while(client_should_run == 1) {
@@ -151,7 +152,7 @@ void *client_interface_connection_handler(void *connection) {
 
     printf("Client connected.\n");
     
-    char *msg_buf = calloc(MAX_CLIENT_MSG_SIZE + 1, sizeof(char));
+    char *msg_buf = calloc(config_get_number("Client_Max_Msg_Size") + 1, sizeof(char));
     char *msg_buf_write_ptr = msg_buf;
     
     long bytes_read_total = 0;
@@ -170,11 +171,11 @@ void *client_interface_connection_handler(void *connection) {
         msg_buf_write_ptr += bytes_read;
         
         // have we got MAX_CLIENT_MSG_SIZE bytes and no \n?
-        if(bytes_read_total == MAX_CLIENT_MSG_SIZE) {
+        if(bytes_read_total == config_get_number("Client_Max_Msg_Size")) {
             write(sock, "err", 3);
             printf(ANSI_COLOR_RED
-                   "Client tried to write over 4K request data - potential"
-                   "buffer overflow exploit attempt!" ANSI_RESET);
+                   "Client tried to write too much request data - potential"
+                   "buffer overflow exploit attempt!\n" ANSI_RESET);
             
             write(sock, "overflow", 8);
             

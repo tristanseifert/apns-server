@@ -18,7 +18,7 @@
 
 #include "ssl.h"
 #include "jansson.h"
-#include "apns_config.h"
+#include "config_parser.h"
 
 volatile uint8_t msg_handler_should_run = 0;
 volatile uint8_t handler_has_quit = 0;
@@ -81,7 +81,7 @@ void *msg_handler_thread(void *param) {
         
         msg_queue_writelock = 0;
         
-        usleep(PUSH_PROC_WAIT * 1000);
+        usleep(((int)(config_get_number("Push_Cycle_Length"))) * 1000);
     }
     
     handler_has_quit = 1;
