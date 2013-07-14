@@ -235,6 +235,12 @@ void *client_interface_connection_handler(void *connection) {
     message->badgeNumber = (int) json_integer_value(json_object_get(parsed, "badge"));
     message->custPayload = copy_json_info(json_object_get(parsed, "custom"));
     message->deviceID = copy_json_info(json_object_get(parsed, "key"));
+    message->buttonTitle = copy_json_info(json_object_get(parsed, "btnTitle"));
+    message->localized_template = copy_json_info(json_object_get(parsed, "localized_text"));
+    message->localized_arguments.argument0 = copy_json_info(json_object_get(parsed, "localized_arg0"));
+    message->localized_arguments.argument1 = copy_json_info(json_object_get(parsed, "localized_arg1"));
+    message->localized_arguments.argument2 = copy_json_info(json_object_get(parsed, "localized_arg2"));
+    message->localized_arguments.argument3 = copy_json_info(json_object_get(parsed, "localized_arg3"));
     
     write(sock, "ok", 2);
     

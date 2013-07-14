@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
 
 #include "msg_handler.h"
 #include "msg_queue.h"
@@ -67,7 +68,7 @@ void *msg_handler_thread(void *param) {
             }
             
 #ifdef MSG_PROCESSING_DEBUG
-            printf("Processed %i push notifications.\n", numNotifsProc);
+            printf("Processed %i push notification(s).\n", numNotifsProc);
 #endif
         } else {
 #ifdef MSG_PROCESSING_DEBUG
@@ -95,9 +96,34 @@ void msg_handler_send_push(push_msg *message) {
     json_t *jsonRoot = json_object();
     
     // set up the text
-    if(message->text != NULL) {
+    if(message->text) {
         json_object_set(apsDict, "alert", json_string(message->text));
-    } if(message->sound) {
+    } else if(message->localized_template) {
+        json_t *alertDict = json_object();
+        
+        json_object_set(alertDict, "loc-key", json_string(message->localized_template));
+        
+        // we've got to have at least the 1st arg
+        if(message->localized_arguments.argument0) {
+            json_t *alertArgs = json_array();
+            
+            json_array_append(alertArgs, json_string(message->localized_arguments.argument0));
+            
+            if(message->localized_arguments.argument1) {
+                json_array_append(alertArgs, json_string(message->localized_arguments.argument1));
+            } if(message->localized_arguments.argument2) {
+                json_array_append(alertArgs, json_string(message->localized_arguments.argument2));
+            } if(message->localized_arguments.argument3) {
+                json_array_append(alertArgs, json_string(message->localized_arguments.argument3));
+            }
+            
+            json_object_set(alertDict, "loc-args", alertArgs);
+        }
+        
+        json_object_set(apsDict, "alert", alertDict);
+    }
+    
+    if(message->sound) {
         json_object_set(apsDict, "sound", json_string(message->text));
     } if(message->badgeNumber != -1) {
         json_object_set(apsDict, "badge", json_integer(message->badgeNumber));
@@ -108,23 +134,34 @@ void msg_handler_send_push(push_msg *message) {
     json_object_set(jsonRoot, "aps", apsDict);
                         
     // encode
-    char *jsonText = json_dumps(apsDict, JSON_ENSURE_ASCII | JSON_COMPACT);
+    char *jsonText = json_dumps(jsonRoot, JSON_ENSURE_ASCII | JSON_COMPACT);
+    printf("Encoded JSON: %s\n", jsonText);
     
     size_t jsonLength = strlen(jsonText);
     
     // set up buffer
-    // message format is, |COMMAND|TOKENLEN|TOKEN|PAYLOADLEN|PAYLOAD|
-    int requiredMsgBufSize = (int) (jsonLength + 512); // Length of JSON plus header buf
-    char *messageBuffer = malloc(sizeof(char) * requiredMsgBufSize);
-    memset(messageBuffer, 0x00, sizeof(char) * requiredMsgBufSize);
-    char *msgBufWrite = messageBuffer;
+    // message format is, |COMMAND|ID|EXPIRY|TOKENLEN|TOKEN|PAYLOADLEN|PAYLOAD|
+    int requiredMsgBufSize = (int) (jsonLength + 512); // Length of JSON plus header
+    uint8_t *messageBuffer = malloc(sizeof(uint8_t) * requiredMsgBufSize);
+    memset(messageBuffer, 0x00, sizeof(uint8_t) * requiredMsgBufSize);
+    uint8_t *msgBufWrite = messageBuffer;
     
     uint16_t networkOrderTokenLength = htons(32);
     uint16_t networkOrderPayloadLength = htons(jsonLength);
-    uint8_t command = 0;
+    uint32_t networkOrderIdentifier = htonl(0xDEADBEEF);
+    uint32_t networkOrderExpiry = htonl(((int) time(NULL)) + (3600 * 24)); // store messages 1 day
+    uint8_t command = 1;
     
     // write command
     *msgBufWrite++ = command;
+    
+    // provider preference
+    memcpy(msgBufWrite, &networkOrderIdentifier, sizeof(uint32_t));
+    msgBufWrite += sizeof(uint32_t);
+    
+    // expiry date network order
+    memcpy(msgBufWrite, &networkOrderExpiry, sizeof(uint32_t));
+    msgBufWrite += sizeof(uint32_t);
     
     // token length network order
     memcpy(msgBufWrite, &networkOrderTokenLength, sizeof(uint16_t));
@@ -141,14 +178,15 @@ void msg_handler_send_push(push_msg *message) {
         bTkRd++;
     }
     
-    printf("\n%s\n", message->deviceID);*/
+    printf("\n%s\n", message->deviceID); */
     
     // payload length
     memcpy(msgBufWrite, &networkOrderPayloadLength, sizeof(uint16_t));
     msgBufWrite += sizeof(uint16_t);
     
     // copy payload
-    memcpy(msgBufWrite, jsonText, jsonLength - 1);
+    memcpy(msgBufWrite, jsonText, jsonLength);
+    msgBufWrite += jsonLength; // Apple prohibits 0x00 endings
     
     // write over SSL connection
     int error = ssl_write_to_sock((SSLConn *) SSL_get_shared_context(), messageBuffer, (int)(msgBufWrite - messageBuffer));
@@ -156,6 +194,14 @@ void msg_handler_send_push(push_msg *message) {
     if(error <= 0) {
         printf("SSL error sending notification: %i\n", error);
     }
+    
+    printf("Binary APNS message:\n");
+    uint8_t *bTkRd = messageBuffer;
+    for(int i =0; i < (msgBufWrite - messageBuffer); i++) {
+        printf("%.2x", *bTkRd);
+        bTkRd++;
+    }    
+    printf("\n\n");
     
     free(jsonText);
     free(binaryToken);
