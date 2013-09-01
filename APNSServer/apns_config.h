@@ -16,10 +16,10 @@
 #define APNSServer_apns_config_h
 
 // Set to one to enable all debug logging
-#define APNS_DEBUG 1
+#define APNS_DEBUG 0
 
 // Path to the config file
-#define CONFIG_FILE_PATH "/Users/tristanseifert/FaceReel/APNSServer/conf/default.conf"
+#define CONFIG_FILE_PATH "/usr/local/etc/apnsserver/apns.conf"
 
 
 // Number of bytes to allocate for hostname buffers
@@ -31,6 +31,7 @@
 #define LINKED_LIST_DEBUG 1
 #define MSG_PROCESSING_DEBUG 1
 #define SSL_DEBUG 1
+#define CONFIG_DEBUG 1
 #endif
 
 #endif

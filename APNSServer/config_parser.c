@@ -17,7 +17,6 @@
 
 config_entry *config_list  = NULL;
 
-volatile config_entry *config_get_ptr();
 extern inline config_entry *config_find_last_entry();
 extern inline int config_allocate_memory(int numItems);
 void config_print_pretty_rep();
@@ -31,13 +30,11 @@ void config_parse(char *path) {
         exit(255);
     }
     
-//    config_list = malloc(sizeof(config_entry));
-//    memset(config_list, 0x00, sizeof(config_entry));
-    
     // if you really need 1024 columns in the config file... well, no.
     char *lineBuffer = malloc(1024);
     char *lineBufferRead = lineBuffer;
     
+    // loop until we read the entire config file
     while (1) {
         memset(lineBuffer, 0x00, 1024);
         
@@ -89,8 +86,10 @@ void config_parse(char *path) {
     
     free(lineBuffer);
     fclose(fp);
-    
+
+#ifdef CONFIG_DEBUG
     config_print_pretty_rep();
+#endif
 }
 
 void *config_get_value(char * key) {
@@ -129,15 +128,7 @@ long long config_get_number(char * key) {
     return (long long) value;
 }
 
-#pragma mark - Linked lists
-/*
- * Returns a reference to the linked list.
- */
-volatile config_entry *config_get_ptr() {
-    volatile config_entry *ptr = config_list;
-    return ptr;
-}
-
+#pragma mark - Linked list
 /*
  * Searches through the queue to find the last entry.
  */
@@ -199,15 +190,10 @@ inline int config_allocate_memory(int numItems) {
 }
 
 /*
- * Prints a pretty representation of the message queue to the console.
+ * Prints a pretty representation of the config buffer to the console.
  */
 void config_print_pretty_rep() {
     config_entry *entry = config_list;
-    
-    if(config_list == NULL) {
-        printf("No items in config list queue.\n");
-        return;
-    }
     
     int i = 0;
     while(entry != NULL) {
